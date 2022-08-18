@@ -20,11 +20,15 @@ import VerticalAppBarContent from './components/vertical/AppBarContent'
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
 
+import { useStore } from "../services/store";
+
 interface Props {
   children: ReactNode
 }
 
 const UserLayout = ({ children }: Props) => {
+  const store = useStore();
+
   // ** Hooks
   const { settings, saveSettings } = useSettings()
 
@@ -57,7 +61,7 @@ const UserLayout = ({ children }: Props) => {
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
+      verticalNavItems={VerticalNavItems(store.state.userType)} // Navigation Items
       afterVerticalNavMenuContent={UpgradeToProImg}
       verticalAppBarContent={(
         props // AppBar Content
