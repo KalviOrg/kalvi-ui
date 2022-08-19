@@ -12,6 +12,8 @@ import TableContainer from '@mui/material/TableContainer'
 
 // ** Types Imports
 import { ThemeColor } from 'src/@core/layouts/types'
+import { useStore } from 'src/services/store'
+import { useEffect, useState } from 'react'
 
 interface RowType {
   age: number
@@ -112,38 +114,105 @@ const statusObj: StatusObj = {
   professional: { color: 'success' }
 }
 
+const MAX_FETCH_RETRIES = 60; // max retries to fetch from provider when expecting a change
+const FETCH_RETRY_TIMEOUT = 1000; // timeout between fetches when expecting a change
+
 const DashboardTable = () => {
+  const {
+    state: { contract},
+  } = useStore();
+
+  const [courses, setCourses] = useState([]);
+  const [completedCourses, setCompletedCourses] = useState([]);
+
+  const fetchCourses = async (retry = false, retries = 0) => {
+    const newCourses = await contract.fetchCourses();
+    const completedCourses = await contract.fetchCompletedCourses();
+    console.log("Fetch Courses Call.....");
+    if (
+      retry &&
+      retries < MAX_FETCH_RETRIES &&
+      courses.length === newCourses.length
+    ) {
+      return setTimeout(
+        () => fetchCourses(true, retries + 1),
+        FETCH_RETRY_TIMEOUT
+      );
+    }
+    setCourses(newCourses);
+    setCompletedCourses(completedCourses);
+  };
+
+  const getCourseStatus = async (courseID: number) => {
+    return await contract.getCourseStatus(courseID);
+  };
+
+  //To fetch courses onload
+  useEffect(() => {
+    if (!contract) {
+      return;
+    }
+
+    fetchCourses();
+  }, [contract]);
+
   return (
     <Card>
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
           <TableHead>
             <TableRow>
+              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Salary</TableCell>
-              <TableCell>Age</TableCell>
+              <TableCell>URL</TableCell>
+              <TableCell>Bounty</TableCell>
+              <TableCell>Cert</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row: RowType) => (
-              <TableRow hover key={row.name} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+            {courses.map((incompleteCourse) => ((incompleteCourse[0] != 0) &&
+              <TableRow hover key={incompleteCourse[0]} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+                <TableCell>{incompleteCourse[0]}</TableCell>
                 <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{row.name}</Typography>
-                    <Typography variant='caption'>{row.designation}</Typography>
+                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{incompleteCourse[1]}</Typography>
+                    <Typography variant='caption'>{incompleteCourse[2]}</Typography>
                   </Box>
                 </TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.salary}</TableCell>
-                <TableCell>{row.age}</TableCell>
+                <TableCell><a href={incompleteCourse[4]} rel="noopener noreferrer" target="_blank">Watch</a></TableCell>
+                <TableCell>{incompleteCourse[5]}</TableCell>
+                <TableCell> -- </TableCell>
                 <TableCell>
                   <Chip
-                    label={row.status}
-                    color={statusObj[row.status].color}
+                    label="Not Completed"
+                    color={statusObj["rejected"].color}
+                    sx={{
+                      height: 24,
+                      fontSize: '0.75rem',
+                      textTransform: 'capitalize',
+                      '& .MuiChip-label': { fontWeight: 500 }
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+            {completedCourses.map((completedCourse) => ((completedCourse[0] != 0) &&
+              <TableRow hover key={completedCourse[0]} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
+                <TableCell>{completedCourse[0]}</TableCell>
+                <TableCell sx={{ py: theme => `${theme.spacing(0.5)} !important` }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography sx={{ fontWeight: 500, fontSize: '0.875rem !important' }}>{completedCourse[1]}</Typography>
+                    <Typography variant='caption'>{completedCourse[2]}</Typography>
+                  </Box>
+                </TableCell>
+                <TableCell><a href={completedCourse[4]} rel="noopener noreferrer" target="_blank">Watch</a></TableCell>
+                <TableCell>{completedCourse[5]}</TableCell>
+                <TableCell><a href="https://testnets.opensea.io/collection/nftport-xyz-v2?search[query]=BountyzMilestoneNFT&amp;search[sortAscending]=true&amp;search[sortBy]=PRICE" rel="noopener noreferrer" target="_blank">View</a></TableCell>
+                <TableCell>
+                  <Chip
+                    label="Completed"
+                    color={statusObj["professional"].color}
                     sx={{
                       height: 24,
                       fontSize: '0.75rem',

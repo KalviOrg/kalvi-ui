@@ -18,20 +18,36 @@ import { UserType } from "../../services/store";
 const navigation = ( userType: number ): VerticalNavItemsType => {
 
   switch (userType) {
-    case UserType.EMPLOYER:
+    case UserType.SPONSOR:
       return [
         {
-          title: 'Employer',
+          title: 'Sponsor',
           icon: HomeOutline,
-          path: '/EmployeeDashboard'
+          path: '/sponsorDashboard'
         }
       ]
-    case UserType.EMPLOYEE:
+    case UserType.LEARNER:
       return [
         {
-          title: 'Employee',
+          sectionTitle: 'Dashboard'
+        },
+        {
+          title: 'Account Details',
           icon: HomeOutline,
-          path: '/EmployeeDashboard'
+          path: '/learnerDashboard'
+        },
+        {
+          sectionTitle: 'Pages'
+        },
+        {
+          title: 'Leaderboard',
+          icon: HomeOutline,
+          path: '/leaderboard'
+        },
+        {
+          title: 'Courses',
+          icon: HomeOutline,
+          path: '/courses'
         }
       ]
     default:
@@ -39,7 +55,7 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
         {
           title: 'Unenrolled',
           icon: HomeOutline,
-          path: '/EmployeeDashboard'
+          path: '/learnerDashboard'
         }
       ]
   }

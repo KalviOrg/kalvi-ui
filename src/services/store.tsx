@@ -7,8 +7,8 @@ import USER_ABI from "../configs/abis/User.json";
 const CONTRACT_ADDRESS = "0x41810ea34aA8208cF0D8B6CD779582e6e70fBb89";
 
 export enum UserType {
-  EMPLOYER = 1,
-  EMPLOYEE = 2,
+  SPONSOR = 1,
+  LEARNER = 2,
   UNENROLLED = 3,
 }
 

@@ -17,10 +17,13 @@ import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import FormHelperText from '@mui/material/FormHelperText'
+import RadioGroup from '@mui/material/RadioGroup'
+import Radio from '@mui/material/Radio'
 
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 interface State {
   password: string
@@ -74,6 +77,13 @@ const FormLayoutsBasic = () => {
                 placeholder='carterleonard@gmail.com'
                 helperText='You can use letters, numbers & periods'
               />
+            </Grid>
+            <Grid item xs={12}>
+              <RadioGroup row defaultValue='male' aria-label='gender' name='account-settings-info-radio'>
+                <FormControlLabel value='male' label='Male' control={<Radio />} />
+                <FormControlLabel value='female' label='Female' control={<Radio />} />
+                <FormControlLabel value='other' label='Other' control={<Radio />} />
+              </RadioGroup>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>

@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactElement } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -17,46 +17,30 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 import CellphoneLink from 'mdi-material-ui/CellphoneLink'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+import TrophyAward from 'mdi-material-ui/TrophyAward'
+
 
 // ** Types
 import { ThemeColor } from 'src/@core/layouts/types'
+import { useStore } from 'src/services/store'
 
 interface DataType {
   stats: string
   title: string
-  color: ThemeColor
+  colors: Array<ThemeColor>
   icon: ReactElement
 }
 
-const salesData: DataType[] = [
+const salesData: DataType = 
   {
     stats: '245k',
+    colors: ["primary","secondary","error","warning","info","success"],
     title: 'Sales',
-    color: 'primary',
-    icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '12.5k',
-    title: 'Customers',
-    color: 'success',
-    icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '1.54k',
-    color: 'warning',
-    title: 'Products',
-    icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
-  },
-  {
-    stats: '$88k',
-    color: 'info',
-    title: 'Revenue',
-    icon: <CurrencyUsd sx={{ fontSize: '1.75rem' }} />
+    icon: <TrophyAward sx={{ fontSize: '1.75rem' }} />
   }
-]
 
-const renderStats = () => {
-  return salesData.map((item: DataType, index: number) => (
+const renderStats = (topPerformers: any[]) => {
+  return topPerformers.map((item, index: number) => (
     <Grid item xs={12} sm={3} key={index}>
       <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar
@@ -67,14 +51,14 @@ const renderStats = () => {
             height: 44,
             boxShadow: 3,
             color: 'common.white',
-            backgroundColor: `${item.color}.main`
+            backgroundColor: `${salesData.colors[Math.floor(Math.random()*salesData.colors.length)]}.main`
           }}
         >
-          {item.icon}
+          {salesData.icon}
         </Avatar>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant='caption'>{item.title}</Typography>
-          <Typography variant='h6'>{item.stats}</Typography>
+          <Typography variant='caption'>{item[1]}</Typography>
+          <Typography variant='h6'>{item[3]}</Typography>
         </Box>
       </Box>
     </Grid>
@@ -82,6 +66,26 @@ const renderStats = () => {
 }
 
 const StatisticsCard = () => {
+  const {
+    state: { contract },
+  } = useStore();
+
+  //To fetch top performer onload
+  useEffect(() => {
+    if (!contract) {
+      return;
+    }
+
+    fetchTopPerformers();
+  }, [contract]);
+
+  const [topPerformers, setTopPerformers] = useState([]);
+
+  const fetchTopPerformers = async () => {
+    const newTopPerformers = await contract.getTopPerformers();
+    setTopPerformers(newTopPerformers);
+  };
+
   return (
     <Card>
       <CardHeader
@@ -94,9 +98,9 @@ const StatisticsCard = () => {
         subheader={
           <Typography variant='body2'>
             <Box component='span' sx={{ fontWeight: 600, color: 'text.primary' }}>
-              Total 48.5% growth
+              Congratulations to this month's top performers
             </Box>{' '}
-            😎 this month
+            😎
           </Typography>
         }
         titleTypographyProps={{
@@ -109,7 +113,7 @@ const StatisticsCard = () => {
       />
       <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
         <Grid container spacing={[5, 0]}>
-          {renderStats()}
+          {renderStats(topPerformers)}
         </Grid>
       </CardContent>
     </Card>
