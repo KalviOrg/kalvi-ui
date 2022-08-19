@@ -163,7 +163,7 @@ const TotalEarning = () => {
                   <Typography variant='caption'>{item.subtitle}</Typography>
                 </Box>
 
-                <Box sx={{ minWidth: 85, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ minWidth: 200, display: 'flex', flexDirection: 'column' }}>
                   <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
                     {item.amount}
                   </Typography>

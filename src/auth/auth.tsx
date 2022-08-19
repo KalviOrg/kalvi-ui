@@ -13,13 +13,13 @@ const Auth: React.FC = () => {
 
     switch (store.state.userType) {
       case UserType.UNENROLLED:
-        router.push("/EmployeeDashboard");
+        router.push("/unenrolledDashboard");
         break;
-      case UserType.EMPLOYER:
-        router.push("/EmployeeDashboard");
+      case UserType.SPONSOR:
+        router.push("/sponsorDashboard");
         break;
-      case UserType.EMPLOYEE:
-        router.push("/EmployeeDashboard");
+      case UserType.LEARNER:
+        router.push("/learnerDashboard");
         break;
     }
   }, [store.state.userType]);
