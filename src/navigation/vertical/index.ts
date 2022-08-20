@@ -74,9 +74,9 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
     default:
       return [
         {
-          title: 'Unenrolled',
+          title: 'Enroll',
           icon: HomeOutline,
-          path: '/learnerDashboard'
+          path: '/chooseRole'
         }
       ]
   }

@@ -74,13 +74,10 @@ async function loginUser(
   dispatch: IStoreDispatch
 ) {
   const signer = provider.getSigner();
-  console.log("providersigner: "+signer);
   const address = await signer.getAddress();
-  console.log("address: "+String(address));
   const wallet = String(address);
   const contract = new ethers.Contract(CONTRACT_ADDRESS, USER_ABI.abi, signer);
   let result = await contract.getUserType(wallet);
-  console.log("resultzzz: " + result);
   const userType = parseInt(result._hex, 16);
 
   dispatch({
