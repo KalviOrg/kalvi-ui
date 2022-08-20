@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import Button from "@mui/material/Button";
 import { loginUser, useStore } from "../services/store";
 import { Web3Provider } from "@ethersproject/providers";
 
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     <p className="mt-2">{store.state.wallet} {ethereumAccount}</p>
     </>
   ) : (
-    <Button onClick={connectMetamaskWallet}>Connect your wallet</Button>
+    <Button variant="contained" onClick={connectMetamaskWallet}>Connect your wallet</Button>
   );
 };
 

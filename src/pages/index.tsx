@@ -1,30 +1,74 @@
-import dynamic from "next/dynamic";
+// ** React Imports
+import { Box, CardContent, Grid,  } from '@mui/material'
 
-const Login = dynamic(() => import("./TestLogin"), {
-  ssr: false,
-});
+import { ReactNode } from 'react'
 
-export default function App() {
-  return (
-    <section
-    style={{
-      backgroundImage: 'url(/bountyxbg-5.png)',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover'
-    }}
-  >
-    <div className="flex flex-1 flex-col items-center justify-center">
-      <main className="section">
-        <p className="text-xxl text-[#0095d9] text-center mb-[8vh]">
-          All in one platfrom for<span className="text-[#0095d9]"> Crypto rewards</span> and <span className="text-[#ea4335]">Incentives</span>
-        </p>
-        <br></br>
-        <span className="flex items-center justify-center">
-            <Login/>
-        </span>
-      </main>
-    </div>
-    </section>
-    
-  );
+// ** Layout Import
+import BlankLayout from 'src/@core/layouts/BlankLayout'
+import VerticalNavHeader from 'src/@core/layouts/components/vertical/navigation/VerticalNavHeader'
+import About from 'src/pages/About'
+
+// ** Type Import
+import { Settings } from 'src/@core/context/settingsContext'
+import { VerticalNavItemsType } from 'src/@core/layouts/types'
+
+// ** Demo Imports
+import Feature1 from './Feature1'
+import Feature2 from './Feature2'
+import Feature3 from './Feature3'
+import Footer1 from './Footer1'
+import Journey from './Journey'
+import Problem from './Problem'
+
+
+interface Props {
+  hidden: boolean
+  navWidth: number
+  settings: Settings
+  children: ReactNode
+  navVisible: boolean
+  toggleNavVisibility: () => void
+  setNavVisible: (value: boolean) => void
+  verticalNavItems?: VerticalNavItemsType
+  saveSettings: (values: Settings) => void
+  verticalNavMenuContent?: (props?: any) => ReactNode
+  afterVerticalNavMenuContent?: (props?: any) => ReactNode
+  beforeVerticalNavMenuContent?: (props?: any) => ReactNode
 }
+
+const App = (props: Props) => {
+  // ** Props
+  const {
+  } = props
+  
+  return (
+   
+      <>
+      <Box className ='content-center' {...props}>
+        <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <VerticalNavHeader {...props}/>
+        </Grid>
+        
+        <Grid item><About/></Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Feature1 />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Feature2 />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Feature3 />
+        </Grid>
+
+        <Grid item><Problem/></Grid>
+        </Grid>
+      </Box>
+      <CardContent><Journey/><Footer1/></CardContent>
+      </>
+  )
+}
+
+App.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
+
+export default App
