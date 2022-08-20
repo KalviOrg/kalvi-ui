@@ -38,5 +38,9 @@ module.exports = {
   },
   publicRuntimeConfig: {
     AssessmentPassPercentage: 50
-  }
+  },
+  env: {
+    WEB3_STORAGE_TOKEN: process.env.WEB3_STORAGE_TOKEN,
+    NFT_PORT_API_KEY: process.env.NFT_PORT_API_KEY,
+  },
 }

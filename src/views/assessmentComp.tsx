@@ -131,7 +131,7 @@ const AssessmentComp: React.FC<IAssessment> = ({
 
     // Called when assessment is not cleared
     const assessmentFailed = async () => {
-        router.push("/courses");
+        router.push("/learnerCourses");
     }
 
     const { width, height } = useWindowSize();
