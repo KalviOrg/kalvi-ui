@@ -133,7 +133,6 @@ const DisplayCourses = () => {
         </Grid>
         <Grid item xs={12} md={3}>
             <Dialog open={open} onClose={handleClose}>
-                {console.log("xxxxyyyyzzzz: " + open)}
                     <DialogTitle>Add New Course</DialogTitle>
                         <DialogContent>
                             <AddNewCourseForm 

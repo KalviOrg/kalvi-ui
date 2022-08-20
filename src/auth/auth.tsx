@@ -13,7 +13,7 @@ const Auth: React.FC = () => {
 
     switch (store.state.userType) {
       case UserType.UNENROLLED:
-        router.push("/unenrolledDashboard");
+        router.push("/chooseRole");
         break;
       case UserType.SPONSOR:
         router.push("/sponsorDashboard");
