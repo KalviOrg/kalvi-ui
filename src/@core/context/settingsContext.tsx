@@ -23,7 +23,7 @@ export type SettingsContextValue = {
 
 const initialSettings: Settings = {
   themeColor: 'primary',
-  mode: 'dark',
+  mode: themeConfig.mode,
   contentWidth: themeConfig.contentWidth
 }
 
