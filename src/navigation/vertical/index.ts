@@ -21,9 +21,30 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
     case UserType.SPONSOR:
       return [
         {
-          title: 'Sponsor',
+          sectionTitle: 'Dashboard'
+        },
+        {
+          title: 'Account Details',
           icon: HomeOutline,
           path: '/sponsorDashboard'
+        },
+        {
+          sectionTitle: 'Pages'
+        },
+        {
+          title: 'Leaderboard',
+          icon: HomeOutline,
+          path: '/leaderboard'
+        },
+        {
+          title: 'Learners',
+          icon: HomeOutline,
+          path: '/sponsorLearner'
+        },
+        {
+          title: 'Courses',
+          icon: HomeOutline,
+          path: '/sponsorCourses'
         }
       ]
     case UserType.LEARNER:
@@ -47,7 +68,7 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
         {
           title: 'Courses',
           icon: HomeOutline,
-          path: '/courses'
+          path: '/learnerCourses'
         }
       ]
     default:

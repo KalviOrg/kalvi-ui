@@ -61,14 +61,27 @@ const DisplayCourses = () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
-        <Grid item xs={12} sx={{ paddingBottom: 4 }}>
+        <Grid item xs={12}>
             <Typography variant='h5'>Available Courses</Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Divider
+                textAlign='left'
+                sx={{
+                m: 0,
+                width: '100%',
+                lineHeight: 'normal',
+                textTransform: 'uppercase',
+                '&:before, &:after': { top: 7, transform: 'none' },
+                '& .MuiDivider-wrapper': { px: 2.5, fontSize: '0.75rem', letterSpacing: '0.21px' }
+                }}
+            />
         </Grid>
         {courses.map((incompleteCourse) => ((incompleteCourse[0] != 0) &&
         <Grid item xs={12} md={3}>
             <Card>
                 <CardMedia sx={{ height: '6.375rem' }} >
-                    <iframe width="300" height="100" src={incompleteCourse[4].replace("watch?v=","embed/")} />
+                    <iframe style={{width:'100%', height:'100%'}} src={incompleteCourse[4].replace("watch?v=","embed/")} />
                 </CardMedia>
                 <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
                     <Typography variant='h6' sx={{ marginBottom: 2 }}>
@@ -95,7 +108,11 @@ const DisplayCourses = () => {
             </Card>
         </Grid>
         ))}
-        <Grid item xs={12} sx={{ paddingTop: 5 }}>
+        
+        <Grid item xs={12} sx={{ paddingTop: 6 }}>
+            <Typography variant='h5'>Completed Courses</Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ paddingBottom: 2, paddingTop: 2 }}>
             <Divider
                 textAlign='left'
                 sx={{
@@ -108,14 +125,11 @@ const DisplayCourses = () => {
                 }}
             />
         </Grid>
-        <Grid item xs={12} sx={{ paddingBottom: 4 }}>
-            <Typography variant='h5'>Completed Courses</Typography>
-        </Grid>
         {completedCourses.map((completeCourse) => ((completeCourse[0] != 0) &&
         <Grid item xs={12} md={3}>
             <Card>
                 <CardMedia sx={{ height: '6.375rem' }} >
-                    <iframe width="300" height="100" src={completeCourse[4].replace("watch?v=","embed/")} />
+                    <iframe style={{width:'100%', height:'100%'}} src={completeCourse[4].replace("watch?v=","embed/")} />
                 </CardMedia>
                 <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
                     <Typography variant='h6' sx={{ marginBottom: 2 }}>
