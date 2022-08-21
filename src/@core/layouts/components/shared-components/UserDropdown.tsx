@@ -64,14 +64,14 @@ const UserDropdown = () => {
     setAnchorEl(null)
   }
 
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState("");
   const fetchUsername = async () => {
     const user_name = await contract.getUserName(wallet);
     console.log("Username: " + user_name);
     setUsername(user_name);
   };
 
-  const [userType, setUserType] = useState();
+  const [userType, setUserType] = useState("");
   const fetchUserType = async () => {
     const result = await contract.getUserType(wallet);
     console.log("Usertype: " + result);
@@ -136,7 +136,7 @@ const UserDropdown = () => {
               <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>{(username != null) ? username : "User"}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{(username != "") ? username : "User"}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
                   {(wallet != null) ? (wallet.substring(0,5)+"..."+wallet.substring((wallet.length-4), wallet.length)) : ""}
               </Typography>
