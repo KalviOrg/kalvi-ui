@@ -1,6 +1,8 @@
 // ** React Imports
 import { useState, SyntheticEvent, Fragment } from 'react'
 
+import { useStore, StoreAction } from "../../../../services/store";
+
 // ** Next Import
 import { useRouter } from 'next/router'
 
@@ -33,6 +35,13 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 }))
 
 const UserDropdown = () => {
+  const store = useStore();
+
+  const handleLogoutClick = async () => {
+      store.dispatch({ type: StoreAction.LOGOUT });
+      window.location.replace("/");
+  };
+
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
 
@@ -144,7 +153,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={() => handleLogoutClick()}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>

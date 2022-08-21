@@ -56,6 +56,7 @@ function StoreProvider({ children }) {
   const [state, dispatch] = React.useReducer(storeReducer, { loggedIn: false });
 
   const value = { state, dispatch };
+
   return (
     <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
   );
@@ -66,23 +67,25 @@ function useStore() {
   if (context === undefined) {
     throw new Error("useStore must be used within a StoreProvider");
   }
+
   return context;
 }
 
 async function loginUser(
   provider: ethers.providers.Web3Provider,
+  logout: () => void,
   dispatch: IStoreDispatch
 ) {
   const signer = provider.getSigner();
   const address = await signer.getAddress();
   const wallet = String(address);
   const contract = new ethers.Contract(CONTRACT_ADDRESS, USER_ABI.abi, signer);
-  let result = await contract.getUserType(wallet);
+  const result = await contract.getUserType(wallet);
   const userType = parseInt(result._hex, 16);
 
   dispatch({
     type: StoreAction.LOGIN,
-    payload: { wallet, provider, userType, contract },
+    payload: { wallet, provider, userType, contract, logout },
   });
 }
 
