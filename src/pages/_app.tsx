@@ -68,12 +68,12 @@ const App = (props: ExtendedAppProps) => {
     <StoreProvider>
       <CacheProvider value={emotionCache}>
         <Head>
-          <title>{`${themeConfig.templateName} - Welcome to Kalvi`}</title>
+          <title>{`KALVI - Welcome to Kalvi`}</title>
           <meta
             name='description'
-            content={`${themeConfig.templateName} – Welcome to Kalvi`}
+            content={`KALVI - Welcome to Kalvi`}
           />
-          <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+          <meta name='keywords' content='Incentivizing learning by streaming rewards' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
 

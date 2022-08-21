@@ -16,7 +16,7 @@ const Journey = () => {
           Let us look at how a typicall learner journey will look like using Kalvi platfrom.
         </Typography>
       </CardContent>
-      <CardMedia sx={{ height: '14.5625rem' }} image='/images/journey.png' />
+      <CardMedia sx={{ height: '16.5625rem' }} image='/images/journey1.png' />
     </Card>
   )
 }

@@ -25,7 +25,7 @@ const FooterContent = () => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
           <Link
             target='_blank'
-            href='https://github.com/KalviOrg/'
+            href='https://github.com/KalviOrg/kalvi-ui#readme'
           >
             Documentation
           </Link>
