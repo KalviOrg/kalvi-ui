@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, SyntheticEvent, Fragment, useEffect } from 'react'
 
 import { useStore, StoreAction } from "../../../../services/store";
 
@@ -17,13 +17,8 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // ** Icons Imports
-import CogOutline from 'mdi-material-ui/CogOutline'
-import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import EmailOutline from 'mdi-material-ui/EmailOutline'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import MessageOutline from 'mdi-material-ui/MessageOutline'
-import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -36,6 +31,9 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 
 const UserDropdown = () => {
   const store = useStore();
+  const {
+        state: { contract, wallet },
+    } = useStore();
 
   const handleLogoutClick = async () => {
       store.dispatch({ type: StoreAction.LOGOUT });
@@ -53,10 +51,31 @@ const UserDropdown = () => {
   }
 
   const handleDropdownClose = (url?: string) => {
-    if (url) {
-      router.push(url)
+    if (userType == "1") { //Employer
+      router.push("/sponsorDashboard")
+    } else if (userType == "2") { //Employee
+      router.push("/learnerDashboard")
+    } else {
+      router.push("/chooseRole")
     }
+    /*if (url) {
+      router.push(url)
+    }*/
     setAnchorEl(null)
+  }
+
+  const [username, setUsername] = useState();
+  const fetchUsername = async () => {
+    const user_name = await contract.getUserName(wallet);
+    console.log("Username: " + user_name);
+    setUsername(user_name);
+  };
+
+  const [userType, setUserType] = useState();
+  const fetchUserType = async () => {
+    const result = await contract.getUserType(wallet);
+    console.log("Usertype: " + result);
+    setUserType(result);
   }
 
   const styles = {
@@ -72,6 +91,16 @@ const UserDropdown = () => {
       color: 'text.secondary'
     }
   }
+
+  //To fetch username onload
+  useEffect(() => {
+    if (!contract) {
+      return;
+    }
+
+    fetchUserType()
+    fetchUsername();
+  }, [contract]);
 
   return (
     <Fragment>
@@ -107,9 +136,9 @@ const UserDropdown = () => {
               <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>John Doe</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{(username != null) ? username : "User"}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                Admin
+                  {(wallet != null) ? (wallet.substring(0,5)+"..."+wallet.substring((wallet.length-4), wallet.length)) : ""}
               </Typography>
             </Box>
           </Box>
@@ -119,37 +148,6 @@ const UserDropdown = () => {
           <Box sx={styles}>
             <AccountOutline sx={{ marginRight: 2 }} />
             Profile
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <EmailOutline sx={{ marginRight: 2 }} />
-            Inbox
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <MessageOutline sx={{ marginRight: 2 }} />
-            Chat
-          </Box>
-        </MenuItem>
-        <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CogOutline sx={{ marginRight: 2 }} />
-            Settings
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CurrencyUsd sx={{ marginRight: 2 }} />
-            Pricing
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <HelpCircleOutline sx={{ marginRight: 2 }} />
-            FAQ
           </Box>
         </MenuItem>
         <Divider />
