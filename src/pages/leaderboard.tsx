@@ -1,196 +1,167 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import TrophyAward from 'mdi-material-ui/TrophyAward'
-
-// ** MUI Imports
-import Grid from '@mui/material/Grid'
 
 // ** Styled Component Import
-import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
+import Color from 'color';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
+import CardActionArea from '@mui/material/CardActionArea';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import { useFourThreeCardMediaStyles } from '@mui-treasury/styles/cardMedia/fourThree';
+import Divider from '@mui/material/Divider'
+import { useStore } from 'src/services/store';
+import Box from '@mui/material/Box'
+import { useEffect, useState } from 'react'
 
-const data = [
-  { icon: <TrophyAward />, label: 'Authentication' },
-  { icon: <TrophyAward />, label: 'Database' },
-  { icon: <TrophyAward />, label: 'Storage' },
-  { icon: <TrophyAward />, label: 'Hosting' },
-];
+// ** Icons Imports
+import Wallet from 'mdi-material-ui/Wallet'
+import Pound from 'mdi-material-ui/Pound'
+import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 
-const FireNav = styled(List)<{ component?: React.ElementType }>({
-  '& .MuiListItemButton-root': {
-    paddingLeft: 24,
-    paddingRight: 24,
+const useGridStyles = makeStyles(({ breakpoints }) => ({
+  root: {
+    [breakpoints.down('lg')]: {
+      justifyContent: 'center',
+    },
   },
-  '& .MuiListItemIcon-root': {
-    minWidth: 0,
-    marginRight: 16,
+}));
+
+const useStyles = makeStyles(() => ({
+  actionArea: {
+    textAlign: 'center',
+    display: 'flex',
+    borderRadius: 16,
+    transition: '0.2s',
+    '&:hover': {
+      transform: 'scale(1.1)',
+    },
   },
-  '& .MuiSvgIcon-root': {
-    fontSize: 20,
+  card: ({color}) => ({
+    minWidth: 256,
+    borderRadius: 16,
+    boxShadow: 'none',
+    '&:hover': {
+      boxShadow: `0 6px 12px 0 ${Color(color)
+        .rotate(-12)
+        .darken(0.2)
+        .fade(0.5)}`,
+    },
+  }),
+  content: ({color}) => {
+    return {
+      backgroundColor: color,
+      padding: '1rem 1.5rem 1.5rem',
+    };
   },
-});
+  title: {
+    fontFamily: 'Keania One',
+    fontSize: '2rem',
+    color: '#fff',
+    textTransform: 'uppercase',
+  },
+  subtitle: {
+    fontFamily: 'Montserrat',
+    color: '#fff',
+    opacity: 0.87,
+    marginTop: '2rem',
+    fontWeight: 500,
+    fontSize: 14,
+  },
+}));
+
+const CustomCard = ({ classes, image, title, address, bounty, rank }) => {
+  const mediaStyles = useFourThreeCardMediaStyles();
+
+  return (
+    <CardActionArea className={classes.actionArea}>
+      <Card className={classes.card}>
+        <CardMedia classes={mediaStyles} image={image} />
+        <CardContent className={classes.content}>
+          <Typography className={classes.title} variant={'h2'}>
+            {title}
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', pt: 10 }}>
+            <Wallet sx={{ color: 'primary.main', marginRight: 2.75 }} fontSize='small' />
+            <Typography variant='body2'>{address}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', pt: 2, pb: 2 }}>
+            <CurrencyUsd sx={{ color: 'primary.main', marginRight: 2.75 }} fontSize='small' />
+            <Typography variant='body2'>{bounty}</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', pb: 2}}>
+            <Pound sx={{ color: 'primary.main', marginRight: 2.75 }} fontSize='small' />
+            <Typography variant='body2'>{rank}</Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    </CardActionArea>
+  );
+};
 
 const LeaderBoard = () => {
-  const [open, setOpen] = React.useState(true);
+  const gridStyles = useGridStyles();
+  const styles = useStyles({ color: '#203f52' });
+  const styles2 = useStyles({ color: '#4d137f' });
+  const styles3 = useStyles({ color: '#ff9900' });
+  const styles4 = useStyles({ color: '#34241e' });
+  const allStyles = [styles, styles2, styles3, styles4];
   
+  const {
+    state: { contract },
+  } = useStore();
+
+  const [topPerformers, setTopPerformers] = useState([]);
+  const fetchTopPerformers = async () => {
+    const newTopPerformers = await contract.getTopPerformers();
+    setTopPerformers(newTopPerformers);
+  };
+
+  //To fetch employees onload
+  useEffect(() => {
+      if (!contract) {
+        return;
+      }
+
+      fetchTopPerformers();
+    }, [contract]);
+
   return (
-    <ApexChartWrapper>
-      <Grid container spacing={6}>
-      <Box sx={{ display: 'flex' }}>
-      <ThemeProvider
-        theme={createTheme({
-          components: {
-            MuiListItemButton: {
-              defaultProps: {
-                disableTouchRipple: true,
-              },
-            },
-          },
-          palette: {
-            mode: 'dark',
-            primary: { main: 'rgb(102, 157, 246)' },
-            background: { paper: 'rgb(5, 30, 52)' },
-          },
-        })}
-      >
-        <Paper elevation={0} sx={{ maxWidth: 256 }}>
-          <FireNav component="nav" disablePadding>
-            <ListItemButton component="a" href="#customized-list">
-              <ListItemIcon sx={{ fontSize: 20 }}>🔥</ListItemIcon>
-              <ListItemText
-                sx={{ my: 0 }}
-                primary="Firebash"
-                primaryTypographyProps={{
-                  fontSize: 20,
-                  fontWeight: 'medium',
-                  letterSpacing: 0,
-                }}
-              />
-            </ListItemButton>
-            <Divider />
-            <ListItem component="div" disablePadding>
-              <ListItemButton sx={{ height: 56 }}>
-                <ListItemIcon>
-                  <TrophyAward color="primary" />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Project Overview"
-                  primaryTypographyProps={{
-                    color: 'primary',
-                    fontWeight: 'medium',
-                    variant: 'body2',
-                  }}
-                />
-              </ListItemButton>
-              <Tooltip title="Project Settings">
-                <IconButton
-                  size="large"
-                  sx={{
-                    '& svg': {
-                      color: 'rgba(255,255,255,0.8)',
-                      transition: '0.2s',
-                      transform: 'translateX(0) rotate(0)',
-                    },
-                    '&:hover, &:focus': {
-                      bgcolor: 'unset',
-                      '& svg:first-of-type': {
-                        transform: 'translateX(-4px) rotate(-20deg)',
-                      },
-                      '& svg:last-of-type': {
-                        right: 0,
-                        opacity: 1,
-                      },
-                    },
-                    '&:after': {
-                      content: '""',
-                      position: 'absolute',
-                      height: '80%',
-                      display: 'block',
-                      left: 0,
-                      width: '1px',
-                      bgcolor: 'divider',
-                    },
-                  }}
-                >
-                  <TrophyAward />
-                  <TrophyAward sx={{ position: 'absolute', right: 4, opacity: 0 }} />
-                </IconButton>
-              </Tooltip>
-            </ListItem>
-            <Divider />
-            <Box
-              sx={{
-                bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
-                pb: open ? 2 : 0,
-              }}
-            >
-              <ListItemButton
-                alignItems="flex-start"
-                onClick={() => setOpen(!open)}
+    <>
+      <Grid classes={gridStyles} container spacing={10} textAlign='center' display='flex' justifyContent='center'>
+        <Grid item xs={12}>
+            <Typography variant='h5'>&#11088; Top Performers &#11088;</Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ paddingBottom: 2, paddingTop: 2 }}>
+            <Divider
+                textAlign='left'
                 sx={{
-                  px: 3,
-                  pt: 2.5,
-                  pb: open ? 0 : 2.5,
-                  '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+                m: 0,
+                width: '100%',
+                lineHeight: 'normal',
+                textTransform: 'uppercase',
+                '&:before, &:after': { top: 7, transform: 'none' },
+                '& .MuiDivider-wrapper': { px: 2.5, fontSize: '0.75rem', letterSpacing: '0.21px' }
                 }}
-              >
-                <ListItemText
-                  primary="Build"
-                  primaryTypographyProps={{
-                    fontSize: 15,
-                    fontWeight: 'medium',
-                    lineHeight: '20px',
-                    mb: '2px',
-                  }}
-                  secondary="Authentication, Firestore Database, Realtime Database, Storage, Hosting, Functions, and Machine Learning"
-                  secondaryTypographyProps={{
-                    noWrap: true,
-                    fontSize: 12,
-                    lineHeight: '16px',
-                    color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
-                  }}
-                  sx={{ my: 0 }}
-                />
-                <TrophyAward
-                  sx={{
-                    mr: -1,
-                    opacity: 0,
-                    transform: open ? 'rotate(-180deg)' : 'rotate(0)',
-                    transition: '0.2s',
-                  }}
-                />
-              </ListItemButton>
-              {open &&
-                data.map((item) => (
-                  <ListItemButton
-                    key={item.label}
-                    sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}
-                  >
-                    <ListItemIcon sx={{ color: 'inherit' }}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.label}
-                      primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
-                    />
-                  </ListItemButton>
-                ))}
-            </Box>
-          </FireNav>
-        </Paper>
-      </ThemeProvider>
-    </Box>
+            />
+        </Grid>
+        {topPerformers.map((performer, perfIndex) => ((performer[0] != null) &&
+          <Grid item>
+            <CustomCard
+              classes={allStyles[Math.floor(Math.random()*allStyles.length)]}
+              title={performer[1]}
+              address={performer[0].substring(0,5)+"..."+performer[0].substring((performer[0].length-4), performer[0].length)}
+              bounty={performer[3]}
+              rank={(perfIndex + 1)}
+              image={
+                'https://steamcdn-a.akamaihd.net/apps/dota2/images/blog/play/dota_heroes.png'
+              }
+            />
+          </Grid>
+        ))}
       </Grid>
-    </ApexChartWrapper>
+    </>
   );
 }
 
