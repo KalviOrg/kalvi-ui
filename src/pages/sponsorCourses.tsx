@@ -7,11 +7,6 @@ import CardContent from '@mui/material/CardContent'
 import PlusCircle from 'mdi-material-ui/PlusCircle'
 import Box from '@mui/material/Box'
 import Rating from '@mui/material/Rating'
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 
@@ -57,14 +52,6 @@ const DisplayCourses = () => {
     
         fetchCourses();
       }, [contract]);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
   return (
     <ApexChartWrapper>
@@ -122,7 +109,7 @@ const DisplayCourses = () => {
                         <Avatar
                             sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
                             >
-                            <PlusCircle onClick={handleClickOpen}/>
+                            <PlusCircle onClick={() => setOpen(true)}/>
                         </Avatar>
                         <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
                             Add New Course
@@ -132,17 +119,7 @@ const DisplayCourses = () => {
             </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-            <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add New Course</DialogTitle>
-                        <DialogContent>
-                            <AddNewCourseForm 
-                                onClose={() => handleClose}
-                                onAdd={() => fetchCourses(true)} />
-                        </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                    </DialogActions>
-            </Dialog>
+            <AddNewCourseForm open={open} onClose={() => setOpen(false)} onAdd={() => fetchCourses(true)} />         
         </Grid>
     </ApexChartWrapper>
   )

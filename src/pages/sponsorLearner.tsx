@@ -6,11 +6,6 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import PlusCircle from 'mdi-material-ui/PlusCircle'
 import Box from '@mui/material/Box'
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import TrophyAward from 'mdi-material-ui/TrophyAward'
@@ -19,8 +14,11 @@ import TrashCanOutline from 'mdi-material-ui/TrashCanOutline'
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import { useStore } from 'src/services/store'
-import { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import AddNewLearnerForm from 'src/views/form-layouts/AddNewLearnerForm'
+import DeleteLearnerForm from 'src/views/form-layouts/DeleteLearnerForm'
+import IconButton from '@mui/material/IconButton'
+import { ThemeColor } from 'src/@core/layouts/types'
 
 const MAX_FETCH_RETRIES = 60; // max retries to fetch from provider when expecting a change
 const FETCH_RETRY_TIMEOUT = 1000; // timeout between fetches when expecting a change
@@ -32,7 +30,9 @@ const SponsorLearner = () => {
 
     const [employees, setEmployees] = useState([]);
     const [topPerformers, setTopPerformers] = useState([]);
-    const [open, setOpen] = useState(false);
+    const [open1, setOpen1] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const [address, setAddress] = useState("");
 
     const fetchEmployees = async (retry = false, retries = 0) => {
         const newEmployees = await contract.fetchEmployees();
@@ -66,13 +66,21 @@ const SponsorLearner = () => {
         fetchTopPerformers();
       }, [contract]);
 
-      const handleClickOpen = () => {
-        setOpen(true);
-    };
+      const handleClick = (address: string) => {
+        setAddress(address)
+        setOpen2(true)
+      }
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+      interface DataType {
+        color: ThemeColor
+        icon: ReactElement
+      }
+      
+      const awardIcon: DataType = 
+        {
+          color: "primary",
+          icon: <TrophyAward sx={{ fontSize: '1.75rem' }}/>
+        }
 
   return (
     <ApexChartWrapper>
@@ -93,7 +101,7 @@ const SponsorLearner = () => {
                     }}
                 />
             </Grid>
-            {employees.map((learner) => ((learner[0] != 0) &&
+            {employees.map((learner, index) => ((learner[0] != 0) &&
             <Grid item xs={12} md={3}>
                 <Card sx={{ position: 'relative' }}>
                     <CardMedia sx={{ height: '6.375rem' }} image='/images/cards/background-user.png' />
@@ -120,20 +128,39 @@ const SponsorLearner = () => {
                             justifyContent: 'space-between'
                         }}
                         >
-                        <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
-                            <Typography variant='h6'>{learner[1]}</Typography>
-                            <Typography variant='caption'>{learner[0].substring(0,5)+"..."+learner[0].substring((learner[0].length-4), learner[0].length)}</Typography>
-                        </Box>
-                        <TrashCanOutline />
+                            <Box sx={{ mr: 2, mb: 1, display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant='h6'>{learner[1]}</Typography>
+                                <Typography variant='caption'>{learner[0].substring(0,5)+"..."+learner[0].substring((learner[0].length-4), learner[0].length)}</Typography>
+                            </Box>
+                            <IconButton size='small' aria-label='settings' className='card-more-options' 
+                                sx={{ color: 'text.secondary' }} onClick={() => handleClick(learner[0])} >
+                                <TrashCanOutline sx={{ fontSize: '3rem' }} />
+                            </IconButton>
                         </Box>
                         <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Typography sx={{ fontWeight: 350, marginBottom: 1 }}>
                                 <Box component='span' sx={{ fontWeight: 'bold' }}>
-                                    $899
+                                    ${learner[3]}
                                 </Box>
                             </Typography>
                             <Typography variant='subtitle2' sx={{ whiteSpace: 'nowrap', color: 'text.primary' }}>
-                                {topPerformers.find(performer=>performer[0] === learner[0]) ? <TrophyAward /> : ''}
+                                {topPerformers.find(performer=>performer[0] === learner[0]) ? (
+                                    <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <Avatar
+                                            variant='rounded'
+                                            sx={{
+                                                mr: 3,
+                                                width: 44,
+                                                height: 44,
+                                                boxShadow: 3,
+                                                color: 'common.white',
+                                                backgroundColor: `${awardIcon.color}.main`
+                                            }}
+                                            >
+                                            {awardIcon.icon}
+                                        </Avatar>
+                                    </Box>
+                                ) : ''}
                             </Typography>
                         </Box>
                     </CardContent>
@@ -155,7 +182,7 @@ const SponsorLearner = () => {
                         <Avatar
                             sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
                             >
-                            <PlusCircle onClick={handleClickOpen}/>
+                            <PlusCircle onClick={() => setOpen1(true)}/>
                         </Avatar>
                         <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
                             Add New Learner
@@ -165,17 +192,10 @@ const SponsorLearner = () => {
             </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-            <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add New Learner</DialogTitle>
-                        <DialogContent>
-                            <AddNewLearnerForm 
-                                onClose={() => handleClose}
-                                onAdd={() => fetchEmployees(true)} />
-                        </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                    </DialogActions>
-            </Dialog>
+            <AddNewLearnerForm open1={open1} onClose={() => setOpen1(false)} />         
+        </Grid>
+        <Grid item xs={12} md={3}>
+            <DeleteLearnerForm address={address} open2={open2} onClose={() => setOpen2(false)} />         
         </Grid>
     </ApexChartWrapper>
   )
