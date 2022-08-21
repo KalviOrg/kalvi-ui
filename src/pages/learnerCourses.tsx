@@ -76,7 +76,7 @@ const DisplayCourses = () => {
       }, [contract]);
 
       function openURL() {
-        window.open("https://testnets.opensea.io/collection/nftport-xyz-v2?search[query]=BountyzMilestoneNFT&amp;search[sortAscending]=true&amp;search[sortBy]=PRICE", "_blank");
+        window.open("https://testnets.opensea.io/collection/nftport-xyz-v2?search[query]=KalviMilestoneNFT&amp;search[sortAscending]=true&amp;search[sortBy]=PRICE", "_blank");
       }
 
       const cardStyles = useStyles();
