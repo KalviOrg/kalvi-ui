@@ -11,56 +11,17 @@ import RunningBalance from 'src/layouts/components/RunningBalance'
 import React, { useEffect, useState } from "react";
 import { getUSDCXBalance } from "../../services/usdcx_contract";
 import { ethers } from "ethers";
-
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
 
 // ** Icons Imports
 import MenuUp from 'mdi-material-ui/MenuUp'
 import DotsVertical from 'mdi-material-ui/DotsVertical'
 
 // ** Types
-import { ThemeColor } from 'src/@core/layouts/types'
 import { flowDetails } from 'src/services/hooks/useSFsdk'
 import { useStore } from 'src/services/store'
-
-interface DataType {
-  title: string
-  imgSrc: string
-  amount: string
-  subtitle: string
-  progress: number
-  color: ThemeColor
-  imgHeight: number
-}
-
-const data: DataType[] = [
-  {
-    progress: 75,
-    imgHeight: 20,
-    title: 'Zipcar',
-    color: 'primary',
-    amount: '$24,895.65',
-    subtitle: 'Vuejs, React & HTML',
-    imgSrc: '/images/cards/logo-zipcar.png'
-  },
-  {
-    progress: 50,
-    color: 'info',
-    imgHeight: 27,
-    title: 'Bitbank',
-    amount: '$8,650.20',
-    subtitle: 'Sketch, Figma & XD',
-    imgSrc: '/images/cards/logo-bitbank.png'
-  },
-  {
-    progress: 20,
-    imgHeight: 20,
-    title: 'Aviato',
-    color: 'secondary',
-    amount: '$1,245.80',
-    subtitle: 'HTML & Angular',
-    imgSrc: '/images/cards/logo-aviato.png'
-  }
-]
+import ConvertCoinsForm from '../form-layouts/ConvertCoinsForm'
 
 const TotalEarning = () => {
   
@@ -83,6 +44,22 @@ const TotalEarning = () => {
     updateNetFlow();
     return () => clearInterval(id);
   }, [provider]);
+
+  const [completedCourses, setCompletedCourses] = useState([]);
+  const fetchCompletedCourses = async () => {
+    const completedCourses = await contract.fetchCompletedCourses();
+    setCompletedCourses(completedCourses);
+  }
+
+  //To fetch courses onload
+  useEffect(() => {
+    if (!contract) {
+      return;
+    }
+
+    fetchUserType()
+    fetchCompletedCourses();
+  }, [contract]);
   
   const updateBalance = () => {
     getUSDCXBalance(provider, wallet).then((value) => {
@@ -98,83 +75,102 @@ const TotalEarning = () => {
     setNetFlow(parseFloat(ethers.utils.formatEther(result.cfa.netFlow)));
   };
 
+  const [open, setOpen] = useState(false);
+  const [userType, setUserType] = useState("");
+  const fetchUserType = async () => {
+    const result = await contract.getUserType(wallet);
+    console.log("Usertype: " + result);
+    setUserType(result);
+  }
+
   return (
-    <Card>
-      <CardHeader
-        title='Total Earning'
-        titleTypographyProps={{ sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' } }}
-        action={
-          <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
-            <DotsVertical />
-          </IconButton>
-        }
-      />
-      <CardContent sx={{ pt: theme => `${theme.spacing(2.25)} !important` }}>
-        <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
-          <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
-            {balance ? <RunningBalance value={balance} rate={netFlow} /> : 0}
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', color: 'success.main' }}>
-            <MenuUp sx={{ fontSize: '1.875rem', verticalAlign: 'middle' }} />
-            <Typography variant='body2' sx={{ fontWeight: 600, color: 'success.main' }}>
-              10%
+    <>
+      <Card>
+        <CardHeader
+          title='Total Earning (in USDCx)'
+          titleTypographyProps={{ sx: { lineHeight: '1.6 !important', letterSpacing: '0.15px !important' } }}
+          action={
+            <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
+              <DotsVertical />
+            </IconButton>
+          }
+        />
+        <CardContent sx={{ pt: theme => `${theme.spacing(2.25)} !important` }}>
+          <Box sx={{ mb: 1.5, display: 'flex', alignItems: 'center' }}>
+            <Typography variant='h4' sx={{ fontWeight: 600, fontSize: '2.125rem !important' }}>
+              {balance ? <RunningBalance value={balance} rate={netFlow} /> : "$0" }
             </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', color: 'success.main' }}>
+              <MenuUp sx={{ fontSize: '1.875rem', verticalAlign: 'middle' }} />
+              <Typography variant='body2' sx={{ fontWeight: 600, color: 'success.main' }}>
+                10%
+              </Typography>
+            </Box>
           </Box>
-        </Box>
 
-        <Typography component='p' variant='caption' sx={{ mb: 10 }}>
-          Compared to $84,325 last year
-        </Typography>
+          <Typography component='p' variant='caption' sx={{ mb: 10 }}>
+              {(userType == "2") ? (
+                <Button variant='contained' size='large' 
+                onClick={() => setOpen(true)}>
+                  Convert to USDC
+                </Button>
+              ) : ""}
+          </Typography>
 
-        {data.map((item: DataType, index: number) => {
-          return (
-            <Box
-              key={item.title}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                ...(index !== data.length - 1 ? { mb: 8.5 } : {})
-              }}
-            >
-              <Avatar
-                variant='rounded'
-                sx={{
-                  mr: 3,
-                  width: 40,
-                  height: 40,
-                  backgroundColor: theme => `rgba(${theme.palette.customColors.main}, 0.04)`
-                }}
-              >
-                <img src={item.imgSrc} alt={item.title} height={item.imgHeight} />
-              </Avatar>
+          {completedCourses.map((completeCourse, index) => {
+            return (
+              ((completeCourse[0] != 0) && 
               <Box
+                key={completeCourse[1]}
                 sx={{
-                  width: '100%',
                   display: 'flex',
-                  flexWrap: 'wrap',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
+                  ...(index !== completedCourses.length - 1 ? { mb: 8.5 } : {})
                 }}
               >
-                <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
-                    {item.title}
-                  </Typography>
-                  <Typography variant='caption'>{item.subtitle}</Typography>
-                </Box>
+                <Avatar
+                  variant='rounded'
+                  sx={{
+                    mr: 3,
+                    width: 40,
+                    height: 40,
+                    backgroundColor: theme => `rgba(${theme.palette.customColors.main}, 0.04)`
+                  }}
+                >
+                  <img src='/images/cards/logo-aviato.png' alt={completeCourse[1]} height={20} />
+                </Avatar>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Box sx={{ marginRight: 2, display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant='body2' sx={{ mb: 0.5, fontWeight: 600, color: 'text.primary' }}>
+                    {completeCourse[1]}
+                    </Typography>
+                    <Typography variant='caption'>{completeCourse[2]}</Typography>
+                  </Box>
 
-                <Box sx={{ minWidth: 200, display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
-                    {item.amount}
-                  </Typography>
-                  <LinearProgress color={item.color} value={item.progress} variant='determinate' />
+                  <Box sx={{ minWidth: 200, display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant='body2' sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}>
+                      ${completeCourse[5]}
+                    </Typography>
+                    <LinearProgress color='primary' value={100} variant='determinate' />
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          )
-        })}
-      </CardContent>
-    </Card>
+              ))
+          })}
+        </CardContent>
+      </Card>
+      <Grid item xs={12} md={3}>
+          <ConvertCoinsForm open={open} onClose={() => setOpen(false)} onTransfer={() => updateBalance()} />         
+      </Grid>
+    </>
   )
 }
 

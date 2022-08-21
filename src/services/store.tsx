@@ -3,7 +3,7 @@ import React from "react";
 
 import USER_ABI from "../configs/abis/User.json";
 
-//Contract address of User.sol(bountyz-core) deployed at Polygon Mumbai
+//Contract address of User.sol(kalvi-core) deployed at Polygon Mumbai
 const CONTRACT_ADDRESS = "0x41810ea34aA8208cF0D8B6CD779582e6e70fBb89";
 
 export enum UserType {

@@ -108,7 +108,7 @@ const AssessmentComp: React.FC<IAssessment> = ({
         // Evaluate assessment result
         if (scorePercentageVal >= publicRuntimeConfig.AssessmentPassPercentage) {
         setAssessmentResult(true);
-        const url = await mintNFT(wallet, "BountyzMilestoneNFT", "Bountyz course completion NFT", imageUrl);
+        const url = await mintNFT(wallet, "KalviMilestoneNFT", "Kalvi course completion NFT", imageUrl);
         setNftURL(url)
         console.log("NFT URL: " + url)
         }

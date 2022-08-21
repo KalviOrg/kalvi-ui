@@ -11,7 +11,7 @@ const RunningBalance: React.FC<IProps> = ({
   value,
   rate,
   timeout = 100,
-  decimalPlaces = 8,
+  decimalPlaces = 6,
   ...props
 }) => {
   const [valueShow, setValueShow] = useState(value);
@@ -26,7 +26,12 @@ const RunningBalance: React.FC<IProps> = ({
       clearInterval(id);
     };
   }, [value, rate]);
-  return <p {...props}>{valueShow.toFixed(decimalPlaces)}</p>;
+  return <p {...props}><img
+  src="https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=022"
+  alt="USDC logo"
+  width={28}
+  height={28}
+/> {valueShow.toFixed(decimalPlaces)}</p>;
 };
 
 export default RunningBalance;

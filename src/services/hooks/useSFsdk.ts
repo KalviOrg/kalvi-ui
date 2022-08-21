@@ -81,7 +81,7 @@ export const flowDetails = async (s) => {
 
   const signer = sf.createSigner({
 
-    // Bountyz USDCx wallet private Key
+    // Kalvi USDCx wallet private Key
     privateKey:
       "1b8239b0e7ab46ec2b0a9b3fc9d93aaebdac37a55a06bc6b7863f4b4329a5e1e",
     provider: customHttpProvider

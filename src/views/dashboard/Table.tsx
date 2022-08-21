@@ -15,6 +15,10 @@ import { ThemeColor } from 'src/@core/layouts/types'
 import { useStore } from 'src/services/store'
 import { useEffect, useState } from 'react'
 
+// ** Icon Imports
+import Video from 'mdi-material-ui/Video'
+import CertificateOutline from 'mdi-material-ui/CertificateOutline'
+
 interface RowType {
   age: number
   name: string
@@ -31,87 +35,13 @@ interface StatusObj {
   }
 }
 
-const rows: RowType[] = [
-  {
-    age: 27,
-    status: 'current',
-    date: '09/27/2018',
-    name: 'Sally Quinn',
-    salary: '$19586.23',
-    email: 'eebsworth2m@sbwire.com',
-    designation: 'Human Resources Assistant'
-  },
-  {
-    age: 61,
-    date: '09/23/2016',
-    salary: '$23896.35',
-    status: 'professional',
-    name: 'Margaret Bowers',
-    email: 'kocrevy0@thetimes.co.uk',
-    designation: 'Nuclear Power Engineer'
-  },
-  {
-    age: 59,
-    date: '10/15/2017',
-    name: 'Minnie Roy',
-    status: 'rejected',
-    salary: '$18991.67',
-    email: 'ediehn6@163.com',
-    designation: 'Environmental Specialist'
-  },
-  {
-    age: 30,
-    date: '06/12/2018',
-    status: 'resigned',
-    salary: '$19252.12',
-    name: 'Ralph Leonard',
-    email: 'dfalloona@ifeng.com',
-    designation: 'Sales Representative'
-  },
-  {
-    age: 66,
-    status: 'applied',
-    date: '03/24/2018',
-    salary: '$13076.28',
-    name: 'Annie Martin',
-    designation: 'Operator',
-    email: 'sganderton2@tuttocitta.it'
-  },
-  {
-    age: 33,
-    date: '08/25/2017',
-    salary: '$10909.52',
-    name: 'Adeline Day',
-    status: 'professional',
-    email: 'hnisius4@gnu.org',
-    designation: 'Senior Cost Accountant'
-  },
-  {
-    age: 61,
-    status: 'current',
-    date: '06/01/2017',
-    salary: '$17803.80',
-    name: 'Lora Jackson',
-    designation: 'Geologist',
-    email: 'ghoneywood5@narod.ru'
-  },
-  {
-    age: 22,
-    date: '12/03/2017',
-    salary: '$12336.17',
-    name: 'Rodney Sharp',
-    status: 'professional',
-    designation: 'Cost Accountant',
-    email: 'dcrossman3@google.co.jp'
-  }
-]
-
 const statusObj: StatusObj = {
   applied: { color: 'info' },
   rejected: { color: 'error' },
   current: { color: 'primary' },
   resigned: { color: 'warning' },
-  professional: { color: 'success' }
+  professional: { color: 'success' },
+  secondary: { color: 'secondary' }
 }
 
 const MAX_FETCH_RETRIES = 60; // max retries to fetch from provider when expecting a change
@@ -119,7 +49,7 @@ const FETCH_RETRY_TIMEOUT = 1000; // timeout between fetches when expecting a ch
 
 const DashboardTable = () => {
   const {
-    state: { contract},
+    state: { contract, wallet },
   } = useStore();
 
   const [courses, setCourses] = useState([]);
@@ -147,12 +77,20 @@ const DashboardTable = () => {
     return await contract.getCourseStatus(courseID);
   };
 
+  const [userType, setUserType] = useState("");
+  const fetchUserType = async () => {
+    const result = await contract.getUserType(wallet);
+    console.log("Usertype: " + result);
+    setUserType(result);
+  }
+
   //To fetch courses onload
   useEffect(() => {
     if (!contract) {
       return;
     }
 
+    fetchUserType()
     fetchCourses();
   }, [contract]);
 
@@ -164,7 +102,7 @@ const DashboardTable = () => {
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>URL</TableCell>
+              <TableCell>Watch</TableCell>
               <TableCell>Bounty</TableCell>
               <TableCell>Cert</TableCell>
               <TableCell>Status</TableCell>
@@ -180,13 +118,13 @@ const DashboardTable = () => {
                     <Typography variant='caption'>{incompleteCourse[2]}</Typography>
                   </Box>
                 </TableCell>
-                <TableCell><a href={incompleteCourse[4]} rel="noopener noreferrer" target="_blank">Watch</a></TableCell>
-                <TableCell>{incompleteCourse[5]}</TableCell>
+                <TableCell><a href={incompleteCourse[4]} rel="noopener noreferrer" target="_blank"><Video /></a></TableCell>
+                <TableCell>${incompleteCourse[5]}</TableCell>
                 <TableCell> -- </TableCell>
                 <TableCell>
                   <Chip
-                    label="Not Completed"
-                    color={statusObj["rejected"].color}
+                    label={(userType=="1") ? "NA" : "Not Completed"}
+                    color={(userType=="1") ? statusObj["secondary"].color : statusObj["rejected"].color}
                     sx={{
                       height: 24,
                       fontSize: '0.75rem',
@@ -206,13 +144,14 @@ const DashboardTable = () => {
                     <Typography variant='caption'>{completedCourse[2]}</Typography>
                   </Box>
                 </TableCell>
-                <TableCell><a href={completedCourse[4]} rel="noopener noreferrer" target="_blank">Watch</a></TableCell>
-                <TableCell>{completedCourse[5]}</TableCell>
-                <TableCell><a href="https://testnets.opensea.io/collection/nftport-xyz-v2?search[query]=BountyzMilestoneNFT&amp;search[sortAscending]=true&amp;search[sortBy]=PRICE" rel="noopener noreferrer" target="_blank">View</a></TableCell>
+                <TableCell><a href={completedCourse[4]} rel="noopener noreferrer" target="_blank"><Video sx={{ marginRight: 2, fontSize: '1.375rem' }} /></a></TableCell>
+                <TableCell>${completedCourse[5]}</TableCell>
+                <TableCell><a href="https://testnets.opensea.io/collection/nftport-xyz-v2?search[query]=KalviMilestoneNFT&amp;search[sortAscending]=true&amp;search[sortBy]=PRICE" 
+                rel="noopener noreferrer" target="_blank"><CertificateOutline sx={{ marginRight: 2, fontSize: '1.375rem' }} /></a></TableCell>
                 <TableCell>
                   <Chip
-                    label="Completed"
-                    color={statusObj["professional"].color}
+                    label={(userType=="1") ? "NA" : "Completed"}
+                    color={(userType=="1") ? statusObj["secondary"].color : statusObj["professional"].color}
                     sx={{
                       height: 24,
                       fontSize: '0.75rem',
