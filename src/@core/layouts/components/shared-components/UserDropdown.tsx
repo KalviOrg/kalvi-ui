@@ -138,6 +138,23 @@ const UserDropdown = () => {
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{(username != "") ? username : "User"}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
+                  {(() => {
+                      if (userType == "1") { // Employer
+                        return (
+                          "Sponsor"
+                        )
+                      } else if (userType == "2") { // Employee
+                        return (
+                          "Learner"
+                        )
+                      } else { // Unenrolled
+                        return (
+                          "Guest"
+                        )
+                      }
+                    })()}
+              </Typography>
+              <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
                   {(wallet != null) ? (wallet.substring(0,5)+"..."+wallet.substring((wallet.length-4), wallet.length)) : ""}
               </Typography>
             </Box>

@@ -1,14 +1,9 @@
 // ** Icon imports
-/*import Login from 'mdi-material-ui/Login'
-import Table from 'mdi-material-ui/Table'
-import CubeOutline from 'mdi-material-ui/CubeOutline'*/
+import Login from 'mdi-material-ui/Login'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
-/*import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
-import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
-import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
-import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'*/
+import BookOpenBlankVariant from 'mdi-material-ui/BookOpenBlankVariant'
+import TrophyAward from 'mdi-material-ui/TrophyAward'
+import School from 'mdi-material-ui/School'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -33,17 +28,17 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
         },
         {
           title: 'Leaderboard',
-          icon: HomeOutline,
+          icon: TrophyAward,
           path: '/leaderboard'
         },
         {
           title: 'Learners',
-          icon: HomeOutline,
+          icon: School,
           path: '/sponsorLearner'
         },
         {
           title: 'Courses',
-          icon: HomeOutline,
+          icon: BookOpenBlankVariant,
           path: '/sponsorCourses'
         }
       ]
@@ -62,12 +57,12 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
         },
         {
           title: 'Leaderboard',
-          icon: HomeOutline,
+          icon: TrophyAward,
           path: '/leaderboard'
         },
         {
           title: 'Courses',
-          icon: HomeOutline,
+          icon: BookOpenBlankVariant,
           path: '/learnerCourses'
         }
       ]
@@ -75,7 +70,7 @@ const navigation = ( userType: number ): VerticalNavItemsType => {
       return [
         {
           title: 'Enroll',
-          icon: HomeOutline,
+          icon: Login,
           path: '/chooseRole'
         }
       ]
