@@ -1,4 +1,5 @@
 // ** MUI Imports
+import Color from 'color';
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
@@ -15,9 +16,29 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import { useStore } from 'src/services/store'
 import { useEffect, useState } from 'react'
 import AddNewCourseForm from 'src/views/form-layouts/AddNewCourseForm'
+import { makeStyles } from '@material-ui/core/styles';
+import CardActionArea from '@mui/material/CardActionArea';
   
 const MAX_FETCH_RETRIES = 60; // max retries to fetch from provider when expecting a change
 const FETCH_RETRY_TIMEOUT = 1000; // timeout between fetches when expecting a change
+
+const useStyles = makeStyles(() => ({
+    actionArea: {
+      transition: '0.2s',
+      '&:hover': {
+        transform: 'scale(1.1)',
+      },
+    },
+    card: () => ({
+      boxShadow: 'none',
+      '&:hover': {
+        boxShadow: `0 6px 12px 0 ${Color("#bfafb2")
+          .rotate(-12)
+          .darken(0.2)
+          .fade(0.5)}`,
+      },
+    })
+  }));
 
 const DisplayCourses = () => {
     const {
@@ -53,6 +74,8 @@ const DisplayCourses = () => {
         fetchCourses();
       }, [contract]);
 
+      const cardStyles = useStyles();
+
   return (
     <ApexChartWrapper>
         <Grid container spacing={6}>
@@ -74,48 +97,52 @@ const DisplayCourses = () => {
             </Grid>
             {courses.map((course) => ((course[0] != 0) &&
             <Grid item xs={12} md={3}>
-                <Card>
-                    <CardMedia sx={{ height: '6.375rem' }} >
-                        <iframe style={{width:'100%', height:'100%'}} src={course[4].replace("watch?v=","embed/")} />
-                    </CardMedia>
-                    <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
-                        <Typography variant='h6' sx={{ marginBottom: 2 }}>
-                        {course[1]}
-                        </Typography>
-                        <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                            <Rating readOnly value={5} name='read-only' sx={{ marginRight: 2 }} />
-                            <Typography variant='body2'>5 Star | 98 reviews</Typography>
-                        </Box>
-                        <Typography sx={{ marginBottom: 2 }}>${course[5]}</Typography>
-                        <Typography variant='body2'>
-                        {course[2]}
-                        </Typography>
-                    </CardContent>
-                </Card>
+                <CardActionArea className={cardStyles.actionArea}>
+                    <Card classes={cardStyles.card}>
+                        <CardMedia sx={{ height: '6.375rem' }} >
+                            <iframe style={{width:'100%', height:'100%'}} src={course[4].replace("watch?v=","embed/")} />
+                        </CardMedia>
+                        <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
+                            <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                            {course[1]}
+                            </Typography>
+                            <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                                <Rating readOnly value={5} name='read-only' sx={{ marginRight: 2 }} />
+                                <Typography variant='body2'>5 Star | 98 reviews</Typography>
+                            </Box>
+                            <Typography sx={{ marginBottom: 2 }}>${course[5]}</Typography>
+                            <Typography variant='body2'>
+                            {course[2]}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </CardActionArea>
             </Grid>
             ))}
             <Grid item xs={12} md={3}>
-                <Card>
-                <CardContent
-                    sx={{
-                    display: 'flex',
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    height: '16.625rem',
-                    padding: theme => `${theme.spacing(9.75, 5, 9.25)} !important`
-                    }}
-                >
-                        <Avatar
-                            sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
-                            >
-                            <PlusCircle onClick={() => setOpen(true)}/>
-                        </Avatar>
-                        <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
-                            Add New Course
-                        </Typography>
-                    </CardContent>
-                </Card>
+                <CardActionArea className={cardStyles.actionArea}>
+                    <Card classes={cardStyles.card}>
+                    <CardContent
+                        sx={{
+                        display: 'flex',
+                        textAlign: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        height: '16.625rem',
+                        padding: theme => `${theme.spacing(9.75, 5, 9.25)} !important`
+                        }}
+                    >
+                            <Avatar
+                                sx={{ width: 50, height: 50, marginBottom: 2.25, color: 'common.white', backgroundColor: 'primary.main' }}
+                                >
+                                <PlusCircle onClick={() => setOpen(true)}/>
+                            </Avatar>
+                            <Typography variant='h6' sx={{ marginBottom: 2.75 }}>
+                                Add New Course
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </CardActionArea>
             </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
