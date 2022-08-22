@@ -219,7 +219,7 @@ const SponsorLearner = () => {
             </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-            <AddNewLearnerForm open1={open1} onClose={() => setOpen1(false)} />         
+            <AddNewLearnerForm open1={open1} onClose={() => setOpen1(false)} onAdd={() => fetchEmployees(true)} />         
         </Grid>
         <Grid item xs={12} md={3}>
             <DeleteLearnerForm address={address} open2={open2} onClose={() => setOpen2(false)} />         

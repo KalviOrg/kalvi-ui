@@ -17,9 +17,10 @@ import { useStore } from 'src/services/store'
 interface IProps {
   open1: boolean;
   onClose: () => void;
+  onAdd: () => void;
 }
 
-const AddNewLearnerForm: React.FC<IProps> = ({ open1, onClose }) => {
+const AddNewLearnerForm: React.FC<IProps> = ({ open1, onClose, onAdd }) => {
   const {
     state: { contract },
   } = useStore();
@@ -34,6 +35,7 @@ const AddNewLearnerForm: React.FC<IProps> = ({ open1, onClose }) => {
       if (withdraw) {
         await contract.changeAccess(wallet);
       }
+      onAdd();
     } catch (error) {
       console.log("Error creating new learner: " + error)
     } finally {

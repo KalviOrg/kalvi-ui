@@ -146,7 +146,7 @@ const LeaderBoard = () => {
                 }}
             />
         </Grid>
-        {topPerformers.map((performer, perfIndex) => ((performer[0] != null) &&
+        {topPerformers.map((performer, perfIndex) => ((performer[0] != 0) &&
           <Grid item>
             <CustomCard
               classes={allStyles[Math.floor(Math.random()*allStyles.length)]}
