@@ -60,6 +60,20 @@ We created a dApp that can connect Employer and Employee together to achieve lea
 ## Kalvi Demo URL
 * Spheron - http://kalvi-ui-v3g4fi.spheron.app/
 
+## Sponsor Integrations
+### Polygon Mumbai testnet deployment contract address
+- https://mumbai.polygonscan.com/address/0x41810ea34aA8208cF0D8B6CD779582e6e70fBb89
+
+### Sequence Wallet integration
+- https://github.com/KalviOrg/kalvi-ui/commit/67e99fa638006b84d50ab320079179a1a481b39a
+
+### Spheron CI/CD Implementation
+- https://aqua.spheron.network/#/org/62db126731a4d30012a2d2b4/project/6300de47d2ef260014438d46/deployments
+- https://kalvi-ui-v3g4fi.spheron.app/
+
+### IPFS Web3.storage Implementation
+- https://github.com/KalviOrg/kalvi-ui/blob/main/src/services/web3StorageUtils.js
+
 ##  Phase 2 Road Map
 
 * Building Futuristic Course Path using Instructional design
