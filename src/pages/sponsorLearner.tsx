@@ -164,7 +164,6 @@ const SponsorLearner = () => {
                             <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Typography sx={{ fontWeight: 350, marginBottom: 1 }}>
                                     <Box component='span' sx={{ fontWeight: 'bold' }}>
-                                        ${learner[3]}
                                     </Box>
                                 </Typography>
                                 <Typography variant='subtitle2' sx={{ whiteSpace: 'nowrap', color: 'text.primary' }}>
