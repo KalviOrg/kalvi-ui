@@ -185,10 +185,10 @@ export const ChooseRole = React.memo(function HighlightCard()  {
                     brand={''}
                     date={''}
                     cover={
-                    'https://www.pcclean.io/wp-content/uploads/2019/04/559308.jpg'
+                    '/images/misc/sponsor.png'
                     }
                     logo={
-                        'https://d3fa68hw0m2vcc.cloudfront.net/bf4/156511609.jpeg'
+                        '/images/misc/sponsorbox.png'
                     }
                     title={
                     <>
@@ -203,10 +203,10 @@ export const ChooseRole = React.memo(function HighlightCard()  {
                     brand={''}
                     date={''}
                     cover={
-                    '/images/misc/pic1.png'
+                    '/images/misc/creator.png'
                     }
                     logo={
-                    'https://d3fa68hw0m2vcc.cloudfront.net/bf4/156511609.jpeg'
+                    '/images/misc/creatorbox.png'
                     }
                     title={
                     <>

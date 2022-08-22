@@ -101,10 +101,10 @@ const CustomCard = ({ classes, image, title, address, bounty, rank }) => {
 
 const LeaderBoard = () => {
   const gridStyles = useGridStyles();
-  const styles = useStyles({ color: '#ff9900' });
-  const styles2 = useStyles({ color: '#ff9900' });
-  const styles3 = useStyles({ color: '#ff9900' });
-  const styles4 = useStyles({ color: '#ff9900' });
+  const styles = useStyles({ color: '#461F89' });
+  const styles2 = useStyles({ color: '#4B2095' });
+  const styles3 = useStyles({ color: '#6536B6' });
+  const styles4 = useStyles({ color: '#7E49DA' });
   const allStyles = [styles, styles2, styles3, styles4];
   
   const {
@@ -154,7 +154,7 @@ const LeaderBoard = () => {
               bounty={performer[3]}
               rank={(perfIndex + 1)}
               image={
-                'https://steamcdn-a.akamaihd.net/apps/dota2/images/blog/play/dota_heroes.png'
+                '/images/misc/TP.png'
               }
             />
           </Grid>
