@@ -49,9 +49,8 @@ const useStyles = makeStyles(() => ({
         .fade(0.5)}`,
     },
   }),
-  content: ({color}) => {
+  content: ({}) => {
     return {
-      backgroundColor: color,
       padding: '1rem 1.5rem 1.5rem',
     };
   },
@@ -102,10 +101,10 @@ const CustomCard = ({ classes, image, title, address, bounty, rank }) => {
 
 const LeaderBoard = () => {
   const gridStyles = useGridStyles();
-  const styles = useStyles({ color: '#203f52' });
-  const styles2 = useStyles({ color: '#4d137f' });
+  const styles = useStyles({ color: '#ff9900' });
+  const styles2 = useStyles({ color: '#ff9900' });
   const styles3 = useStyles({ color: '#ff9900' });
-  const styles4 = useStyles({ color: '#34241e' });
+  const styles4 = useStyles({ color: '#ff9900' });
   const allStyles = [styles, styles2, styles3, styles4];
   
   const {

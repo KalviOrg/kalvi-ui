@@ -95,30 +95,35 @@ const DisplayCourses = () => {
                     }}
                 />
             </Grid>
-            {courses.map((course) => ((course[0] != 0) &&
-            <Grid item xs={12} md={3}>
-                <CardActionArea className={cardStyles.actionArea}>
-                    <Card classes={cardStyles.card}>
-                        <CardMedia sx={{ height: '6.375rem' }} >
-                            <iframe style={{width:'100%', height:'100%'}} src={course[4].replace("watch?v=","embed/")} />
-                        </CardMedia>
-                        <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
-                            <Typography variant='h6' sx={{ marginBottom: 2 }}>
-                            {course[1]}
-                            </Typography>
-                            <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                                <Rating readOnly value={5} name='read-only' sx={{ marginRight: 2 }} />
-                                <Typography variant='body2'>5 Star | 98 reviews</Typography>
-                            </Box>
-                            <Typography sx={{ marginBottom: 2 }}>${course[5]}</Typography>
-                            <Typography variant='body2'>
-                            {course[2]}
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </CardActionArea>
-            </Grid>
-            ))}
+            {courses.map((course) => {
+              const randRating = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+              const randReview = Math.floor(Math.random() * (40 - 5 + 1)) + 5;
+
+              return ((course[0] != 0) &&
+                  <Grid item xs={12} md={3}>
+                      <CardActionArea className={cardStyles.actionArea}>
+                          <Card classes={cardStyles.card}>
+                              <CardMedia sx={{ height: '6.375rem' }} >
+                                  <iframe style={{width:'100%', height:'100%'}} src={course[4].replace("watch?v=","embed/")} />
+                              </CardMedia>
+                              <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
+                                  <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                                  {course[1]}
+                                  </Typography>
+                                  <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                                      <Rating readOnly value={randRating} name='read-only' sx={{ marginRight: 2 }} />
+                                      <Typography variant='body2'>{randRating} Star | {randReview} reviews</Typography>
+                                  </Box>
+                                  <Typography sx={{ marginBottom: 2 }}>${course[5]}</Typography>
+                                  <Typography variant='body2'>
+                                  {course[2]}
+                                  </Typography>
+                              </CardContent>
+                          </Card>
+                      </CardActionArea>
+                  </Grid>
+            );
+            })}
             <Grid item xs={12} md={3}>
                 <CardActionArea className={cardStyles.actionArea}>
                     <Card classes={cardStyles.card}>

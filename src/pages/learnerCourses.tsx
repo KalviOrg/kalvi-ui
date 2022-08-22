@@ -100,39 +100,44 @@ const DisplayCourses = () => {
                 }}
             />
         </Grid>
-        {courses.map((incompleteCourse) => ((incompleteCourse[0] != 0) &&
-        <Grid item xs={12} md={3}>
-          <CardActionArea className={cardStyles.actionArea}>
-              <Card classes={cardStyles.card}>
-                  <CardMedia sx={{ height: '6.375rem' }} >
-                      <iframe style={{width:'100%', height:'100%'}} src={incompleteCourse[4].replace("watch?v=","embed/")} />
-                  </CardMedia>
-                  <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
-                      <Typography variant='h6' sx={{ marginBottom: 2 }}>
-                      {incompleteCourse[1]}
-                      </Typography>
-                      <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                          <Rating readOnly value={5} name='read-only' sx={{ marginRight: 2 }} />
-                          <Typography variant='body2'>5 Star | 98 reviews</Typography>
-                      </Box>
-                      <Typography sx={{ marginBottom: 2 }}>${incompleteCourse[5]}</Typography>
-                      <Typography variant='body2'>
-                      {incompleteCourse[2]}
-                      </Typography>
-                  </CardContent>
-                  <Button variant='contained' sx={{ py: 2.5, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }} 
-                  onClick={() => router.push({
-                    pathname: '/course',
-                    query: { courseID: incompleteCourse[0], 
-                              courseName: incompleteCourse[1], 
-                              courseURL: incompleteCourse[4], 
-                              courseBounty: incompleteCourse[5]}}, '/course')}>
-                      Begin
-                  </Button>
-              </Card>
-          </CardActionArea>
-        </Grid>
-        ))}
+        {courses.map((incompleteCourse) => {
+          const randRating = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+          const randReview = Math.floor(Math.random() * (40 - 5 + 1)) + 5;
+
+          return ((incompleteCourse[0] != 0) &&
+            <Grid item xs={12} md={3}>
+              <CardActionArea className={cardStyles.actionArea}>
+                  <Card classes={cardStyles.card}>
+                      <CardMedia sx={{ height: '6.375rem' }} >
+                          <iframe style={{width:'100%', height:'100%'}} src={incompleteCourse[4].replace("watch?v=","embed/")} />
+                      </CardMedia>
+                      <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
+                          <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                          {incompleteCourse[1]}
+                          </Typography>
+                          <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                              <Rating readOnly value={randRating} name='read-only' sx={{ marginRight: 2 }} />
+                              <Typography variant='body2'>{randRating} Star | {randReview} reviews</Typography>
+                          </Box>
+                          <Typography sx={{ marginBottom: 2 }}>${incompleteCourse[5]}</Typography>
+                          <Typography variant='body2'>
+                          {incompleteCourse[2]}
+                          </Typography>
+                      </CardContent>
+                      <Button variant='contained' sx={{ py: 2.5, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }} 
+                      onClick={() => router.push({
+                        pathname: '/course',
+                        query: { courseID: incompleteCourse[0], 
+                                  courseName: incompleteCourse[1], 
+                                  courseURL: incompleteCourse[4], 
+                                  courseBounty: incompleteCourse[5]}}, '/course')}>
+                          Begin
+                      </Button>
+                  </Card>
+              </CardActionArea>
+            </Grid>
+          );
+        })}
         
         <Grid item xs={12} sx={{ paddingTop: 6 }}>
             <Typography variant='h5'>Completed Courses</Typography>
@@ -150,34 +155,39 @@ const DisplayCourses = () => {
                 }}
             />
         </Grid>
-        {completedCourses.map((completeCourse) => ((completeCourse[0] != 0) &&
-        <Grid item xs={12} md={3}>
-            <CardActionArea className={cardStyles.actionArea}>
-              <Card classes={cardStyles.card}>
-                  <CardMedia sx={{ height: '6.375rem' }} >
-                      <iframe style={{width:'100%', height:'100%'}} src={completeCourse[4].replace("watch?v=","embed/")} />
-                  </CardMedia>
-                  <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
-                      <Typography variant='h6' sx={{ marginBottom: 2 }}>
-                      {completeCourse[1]}
-                      </Typography>
-                      <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                          <Rating readOnly value={5} name='read-only' sx={{ marginRight: 2 }} />
-                          <Typography variant='body2'>5 Star | 98 reviews</Typography>
-                      </Box>
-                      <Typography sx={{ marginBottom: 2 }}>${completeCourse[5]}</Typography>
-                      <Typography variant='body2'>
-                      {completeCourse[2]}
-                      </Typography>
-                  </CardContent>
-                  <Button variant='contained' sx={{ py: 2.5, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }} 
-                  onClick={openURL}>
-                      View NFT
-                  </Button>
-              </Card>
-            </CardActionArea>
-        </Grid>
-        ))}
+        {completedCourses.map((completeCourse) => {
+          const randRating = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+          const randReview = Math.floor(Math.random() * (40 - 5 + 1)) + 5;
+
+          return ((completeCourse[0] != 0) &&
+            <Grid item xs={12} md={3}>
+                <CardActionArea className={cardStyles.actionArea}>
+                  <Card classes={cardStyles.card}>
+                      <CardMedia sx={{ height: '6.375rem' }} >
+                          <iframe style={{width:'100%', height:'100%'}} src={completeCourse[4].replace("watch?v=","embed/")} />
+                      </CardMedia>
+                      <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
+                          <Typography variant='h6' sx={{ marginBottom: 2 }}>
+                          {completeCourse[1]}
+                          </Typography>
+                          <Box sx={{ mb: 4.75, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                              <Rating readOnly value={randRating} name='read-only' sx={{ marginRight: 2 }} />
+                              <Typography variant='body2'>{randRating} Star | {randReview} reviews</Typography>
+                          </Box>
+                          <Typography sx={{ marginBottom: 2 }}>${completeCourse[5]}</Typography>
+                          <Typography variant='body2'>
+                          {completeCourse[2]}
+                          </Typography>
+                      </CardContent>
+                      <Button variant='contained' sx={{ py: 2.5, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }} 
+                      onClick={openURL}>
+                          View NFT
+                      </Button>
+                  </Card>
+                </CardActionArea>
+            </Grid>
+        );
+      })}
         
       </Grid>
     </ApexChartWrapper>
