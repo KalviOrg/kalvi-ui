@@ -3,6 +3,8 @@ import Button from "@mui/material/Button";
 import { loginUser, StoreAction, useStore } from "../services/store";
 import { Web3Provider } from "@ethersproject/providers";
 import { CircularProgress } from "@mui/material";
+import Sequence from "../services/sequence";
+import { ethers } from "ethers";
 
 
 declare const window: any
@@ -27,12 +29,52 @@ const Login: React.FC = () => {
       loginUser(new Web3Provider(window.ethereum), logout, store.dispatch);
   }
 
-  const logout = () => {
+  async function connectSequence() {
+    Sequence.connectWallet(true);
+    try {
+      const wallet = Sequence.init(handleLoginSequence, handleLogout);
+      const session = wallet.getSession();
+      if (session) {
+        handleLoginSequence([session.accountAddress], wallet);
+
+        return;
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleLoginSequence = async (accounts: string[], wallet) => {
+    try {
+      wallet.saveSession();
+      const authProvider = await wallet.getProvider();
+      const provider = new ethers.providers.Web3Provider(authProvider);
+      loginUser(provider, () => logout(true), store.dispatch);
+    } catch (error) {
+      console.error(error);
+      logout(true);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+  const logout = (isSequence: boolean = false) => {
+    if(isSequence) {
+      try {
+        Sequence.wallet?.disconnect();
+      } catch (error) {
+        console.error(error);
+      }
+
+      handleLogout();
+    }
+
     try {
       handleLogout();
     } catch (error) {
       console.error(error);
     }
+
   };
 
   const handleLogout = () => {
@@ -44,8 +86,10 @@ const Login: React.FC = () => {
     <>
         <CircularProgress />
     </>
-  ) : (
-    <Button variant="contained" onClick={connectMetamaskWallet}>Connect your wallet</Button>
+  ) : (  <>
+    <Button variant="contained" onClick={connectMetamaskWallet}>Connect using Metamask</Button>
+    <Button variant="contained" onClick={connectSequence}>Connect using Sequence</Button>
+    </>
   );
 };
 
