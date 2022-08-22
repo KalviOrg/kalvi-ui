@@ -45,7 +45,7 @@ const Login: React.FC = () => {
         <CircularProgress />
     </>
   ) : (
-    <Button variant="contained" onClick={connectMetamaskWallet}>Connect your wallet</Button>
+    <Button variant="contained" onClick={connectMetamaskWallet}>Connect Metamask</Button>
   );
 };
 
