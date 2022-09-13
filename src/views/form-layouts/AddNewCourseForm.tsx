@@ -1,5 +1,6 @@
 // ** React Imports
 import { useEffect, useRef, useState } from 'react'
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -13,6 +14,8 @@ import { storeWithProgress, makeFileObject, makeFileUrl } from '../../services/w
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DropzoneArea } from 'material-ui-dropzone';
+import { Theme } from '@mui/material/styles'
 
 interface IProps {
   open: boolean;
@@ -25,6 +28,16 @@ const AddNewCourseForm: React.FC<IProps> = ({ open, onClose, onAdd }) => {
     state: { contract },
   } = useStore();
 
+  const useStyles = makeStyles(() => createStyles({
+    previewChip: {
+      height: "80px",
+      width: "100%",
+      textAlign: 'center',
+      display: 'flex',
+      borderRadius: 16,
+      padding: '1rem 1.5rem 1.5rem',
+    },
+  }));
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -32,6 +45,8 @@ const AddNewCourseForm: React.FC<IProps> = ({ open, onClose, onAdd }) => {
   const [bounty, setBounty] = useState(0);
   const [qJsonFile, setQJsonFile] = useState("");
   const [qJsonFilename, setQJsonFilename] = useState("");
+  const classes = useStyles();
+
 
   const hiddenFileInput = useRef(null);
   const handleClick = event => {
@@ -102,6 +117,22 @@ const AddNewCourseForm: React.FC<IProps> = ({ open, onClose, onAdd }) => {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField fullWidth label='Bounty' onChange={(value) => setBounty(parseInt(value.currentTarget.value, 0))} />
+                </Grid>
+                <Grid item xs={12}>
+                  <DropzoneArea
+                      showPreviews={true}
+                      showPreviewsInDropzone={false}
+                      showFileNames={true}
+                      useChipsForPreview
+                      previewGridProps={{container: { spacing: 1, direction: 'row' }}}
+                      previewChipProps={{classes: { root: classes.previewChip } }}
+                      previewText="Selected files"
+                      acceptedFiles={['application/json','video/mp4']}
+                      filesLimit={2}
+                      maxFileSize={50000000}
+                      dropzoneText="Drag-Drop Questionnaire (json) and Course Videos (mp4)"
+                      onChange={(files) => console.log('Files: ', files)}
+                    />
                 </Grid>
                 <Grid item xs={12}>
                   <Box  
